@@ -1,3 +1,10 @@
+<?php
+$display_mode = "advanced";
+$mode = \FreePBX::Config()->get("FPBXOPMODE");
+if(!empty($mode)) {
+	$display_mode = $mode;
+}
+?>
 <div class="display no-border">
   <form class="popover-form fpbx-submit" id="frm_extensions" onsubmit="return frm_extensions_onsubmit(this);" name="frm_extensions" action="config.php?display=extensions<?php echo isset($_REQUEST['extdisplay']) && trim($_REQUEST['extdisplay']) != '' ? '&amp;extdisplay='.$_REQUEST['extdisplay'] : '' ?>" method="post" data-fpbx-delete="config.php?display=extensions&amp;extdisplay=<?php echo $_REQUEST['extdisplay'] ?>&amp;action=del" role="form">
     <?php foreach ( $html['top'] as $elem ) {
@@ -23,7 +30,11 @@
         <?php foreach($html['middle'] as $category => $sections) { ?>
           <div id="<?php echo strtolower($category)?>" role="tabpanel" class="tab-pane <?php echo ($active == strtolower($category)) ? 'active' : ''?>">
             <div class="container-fluid">
-              <?php foreach($sections as $section => $elements) { ?>
+              <?php foreach($sections as $section => $elements) {
+		      if (($display_mode == "basic") && 
+				      ((strstr($section, 'XactView Settings')) ||
+				       (strstr($section, 'Device Options')) ||
+				       (strstr($section, 'Paging and Intercom')))) { continue; } ?>
                 <div class="section-title" data-for="<?php echo strtolower($category)."_".strtolower($section)?>"><h3><i class="fa fa-minus"></i> <?php echo $section?></h3></div>
                 <div class="section" data-id="<?php echo strtolower($category)."_".strtolower($section)?>">
                   <?php foreach($elements as $elem) { ?>
