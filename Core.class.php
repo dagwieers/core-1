@@ -2394,6 +2394,9 @@ class Core extends \FreePBX_Helpers implements \BMO  {
 		if (empty($existing)) {
 			$sql="INSERT INTO incoming (rvolume, cidnum, extension, destination, privacyman, pmmaxretries, pmminlength, alertinfo, ringing, reversal, mohclass, description, grppre, delay_answer, pricid) VALUES (:rvolume, :cidnum, :extension, :destination, :privacyman, :pmmaxretries, :pmminlength, :alertinfo, :ringing, :reversal, :mohclass, :description, :grppre, :delay_answer, :pricid)";
 			$sth = $this->database->prepare($sql);
+			if (empty($settings['mohclass'])) {
+				$settings['mohclass']='';
+			}
 			$sth->execute(array(':rvolume' => $settings['rvolume'], ':cidnum' => $settings['cidnum'], ':extension' => $settings['extension'], ':destination' => $settings['destination'], ':privacyman' => $settings['privacyman'], ':pmmaxretries' => $settings['pmmaxretries'], ':pmminlength' => $settings['pmminlength'], ':alertinfo' => $settings['alertinfo'], ':ringing' => $settings['ringing'], ':reversal' => $settings['reversal'], ':mohclass' => $settings['mohclass'], ':description' => $settings['description'], ':grppre' => $settings['grppre'], ':delay_answer' => $settings['delay_answer'], ':pricid' => $settings['pricid']));
 			$this->freepbx->Hooks->processHooks($settings);
 			return true;
